@@ -6,7 +6,9 @@
 #include <SDL2/SDL_image.h>
 
 #include "Component.h"
+#include "character/Player.h"
 #include "utils/GameException.h"
+
 
 class GameWorld {
 
@@ -35,7 +37,7 @@ class GameWorld {
 
         void handle_input(SDL_Event event);
         void update();
-        void render(SDL_Texture* spriteSheet, SDL_Rect srcRect , SDL_Rect destRect);
+        void render();
         void add_component(Component* component);
 
 

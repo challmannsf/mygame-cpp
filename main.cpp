@@ -2,7 +2,8 @@
 #include <SDL2/SDL.h>
 #include <SDL2/SDL_image.h>
 #include <iostream>
-#include "engine/animation/AnimationAsset.h"
+#include "engine/animation/PlayerAnimationAsset.h"
+#include "engine/input/InputComponent.h"
 #include "engine/GameWorld.h"
 #include "engine/character/Player.h"
 
@@ -11,21 +12,23 @@ int main(int argc, char* argv[]) {
 
     GameWorld* world;
     Player* main_player;
-    AnimationAsset* anim_asset; 
-    SDL_Texture* spriteSheet;
+    PlayerAnimationAsset* anim_asset; 
+    InputComponent* input_component;
 
 
     try {
         world = new GameWorld();
         main_player = new Player();
-        anim_asset = new AnimationAsset(); // set lastFRametime
+        anim_asset = new PlayerAnimationAsset();
         anim_asset->set_num_frames(6);
-        anim_asset->set_texture_path("asset/chars/hero/Idle.png");
+        anim_asset->add_texture_path(AnimationAsset::render_states::IDLE, "asset/chars/hero/Idle.png");
         main_player->set_world(world);
-        main_player->add_component<AnimationAsset>(anim_asset);
-        main_player->get_anim_asset()->load_texture(world->get_renderer());
-        spriteSheet = main_player->get_anim_asset()->get_anim_texture();
+        main_player->add_component<PlayerAnimationAsset>(anim_asset);
 
+        input_component = new InputComponent();
+        main_player->add_component(input_component);
+
+        main_player->get_anim_asset()->load_textures(world->get_renderer());
         // place a player in the world
         world->add_component(main_player);
     } catch (const GameException& exc) { // Catch by const reference
@@ -33,6 +36,7 @@ int main(int argc, char* argv[]) {
             delete main_player;
             delete world;
             delete anim_asset;
+            delete input_component;
             return -1;
         }
     }
@@ -51,8 +55,9 @@ int main(int argc, char* argv[]) {
                 if (event.key.keysym.sym == SDLK_ESCAPE) {
                     running = false;
                 }
-                world->handle_input(event);
             }
+
+            world->handle_input(event);
         }
 
         // Update the game world with all components
@@ -60,7 +65,7 @@ int main(int argc, char* argv[]) {
         world->update();
 
         // Clear the screen
-        world->render(spriteSheet, main_player->get_anim_asset()->get_src_rect(), main_player->get_anim_asset()->get_dest_rect());
+        world->render();
     
       
     }

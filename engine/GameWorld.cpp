@@ -79,8 +79,8 @@ void GameWorld::update() {
     }
 }
 
-// TODO - remove arguments later on and move it to player or component
-void GameWorld::render(SDL_Texture* spriteSheet, SDL_Rect srcRect, SDL_Rect destRect) {
+
+void GameWorld::render() {
     SDL_SetRenderDrawColor(this->renderer, 255, 255, 255, 255); // White background
     SDL_RenderClear(this->renderer);
 
@@ -88,8 +88,8 @@ void GameWorld::render(SDL_Texture* spriteSheet, SDL_Rect srcRect, SDL_Rect dest
         component->render(this->renderer);
     }
 
-    // TODO - move into sprite
-//    SDL_RenderCopy(this->renderer, spriteSheet, &srcRect, &destRect);
+    // render anything here from the gameworld
+    // SDL_RenderCopy(this->renderer, spriteSheet, &srcRect, &destRect);
 
     // Update the screen
     SDL_RenderPresent(this->renderer);
@@ -103,8 +103,18 @@ void GameWorld::add_component(Component* component) {
     this->components.push_back(component);
 }
 
+/**
+ * TODO - separat into an input component later on
+ */
 void GameWorld::handle_input(SDL_Event event) {
-   if (event.type == SDL_KEYDOWN) {
-
+    // The player is known to the world
+    // sent the input to the player
+    for (auto &component : this->components) {
+        // Loop through all components until the player is found and handle the input ?
+        if (Player* player = dynamic_cast<Player*>(component)) {
+            player->handle_input(event);
+        }
     }
+
+   
 }

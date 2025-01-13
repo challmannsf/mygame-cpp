@@ -5,14 +5,22 @@
 #include "../Component.h"
 
 class AnimationAsset : public Component {
+    
+    public:
+        struct render_states {
+            static const std::string IDLE;
+            static const std::string WALKING;
+            static const std::string ATTACKING;
+        };
 
     private:
         std::string texture_path;
+        std::map<std::string, std::string> texture_paths;
         SDL_Texture* anim_texture;
+        std::map<std::string, SDL_Texture*> anim_textures;
         int current_frame = 0;
         Uint32 last_frame_time;
         int num_frames;
-
         int sprite_width = 100;  // Width of each frame in the sprite sheet
         int sprite_height = 130; // Height of each frame in the sprite sheet
 
@@ -22,17 +30,21 @@ class AnimationAsset : public Component {
         // Destination rectangle (position and size on the screen)
         SDL_Rect dest_rect;
 
+        // The current state of the animation to render the texture for
+        std::string current_render_state; 
+
     public:
 
         AnimationAsset();
         ~AnimationAsset();
-        void load_texture(SDL_Renderer* renderer);
+        void load_textures(SDL_Renderer* renderer);
 
-        void set_texture_path(std::string path);
+        void add_texture_path(std::string name, std::string path);
         const std::string get_texture_path();
 
-        void set_anim_texture(SDL_Texture* texture);
-        SDL_Texture* get_anim_texture();
+        void add_anim_texture(std::string anim_name, SDL_Texture* texture);
+        
+        std::map<std::string, SDL_Texture*> get_anim_textures();
 
         void update() override;
         void render(SDL_Renderer* renderer) override;
@@ -43,4 +55,7 @@ class AnimationAsset : public Component {
 
         void set_dest_rect(SDL_Rect dest_rect);
         SDL_Rect get_dest_rect();
+
+        void set_render_state(const std::string& state);
+        const std::string& get_render_state();
 };

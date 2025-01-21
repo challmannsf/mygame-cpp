@@ -21,14 +21,13 @@ class GameWorld {
         const int SCREEN_HEIGHT = 600;
         const int SPRITE_WIDTH = 100;  // Width of each frame in the sprite sheet
         const int SPRITE_HEIGHT = 130; // Height of each frame in the sprite sheet
-        const int NUM_FRAMES = 6;     // Total number of frames in the animation
         SDL_Window* window;
         SDL_Renderer* renderer;
         bool img_initiated = false;
 
     public: 
 
-        const int FRAME_TIME = 100;   // Time per frame in milliseconds
+        const int FRAME_TIME = 60;   // Time per frame in milliseconds
         GameWorld();
         ~GameWorld();
 

@@ -15,7 +15,21 @@ template<typename T> void Player::add_component(T* arg) {
     }
 }
 
+/**
+ * All animation related updates needs to be perfomed here
+ */
 void Player::update() {
+
+    if (this->get_movement_speed() != 0) {
+        this->move();
+        if (this->anim_asset->get_render_state() != AnimationAsset::render_states::WALKING) {
+            this->anim_asset->play_animation_walking();
+        }
+    } else if (this->get_movement_speed() == 0) {
+        if (this->anim_asset->get_render_state() != AnimationAsset::render_states::IDLE) {
+            this->anim_asset->play_animation_idle();
+        }
+    }
     this->anim_asset->update();
 }
 
@@ -26,6 +40,12 @@ void Player::set_anim_asset(PlayerAnimationAsset* asset) {
 
 void Player::set_movement_speed(int speed) {
     this->movement_speed = speed;
+}
+
+void Player::move() {
+    SDL_Rect dest_rect = this->anim_asset->get_dest_rect();
+    dest_rect.x += this->movement_speed;
+    this->anim_asset->set_dest_rect(dest_rect);
 }
 
 int Player::get_movement_speed() { 
@@ -39,19 +59,17 @@ void Player::handle_input(SDL_Event event) {
         throw GameException(msg, GameException::ABORT);
     }
 
+    // TODO move to input component
     if(event.type == SDL_KEYDOWN) {
         // Increase speed
         if (event.key.keysym.sym == SDLK_RIGHT) {
             std::cout << "Right key pressed" << std::endl;
-            this->set_movement_speed(10);
-            this->anim_asset->play_animation_walking();
+            this->set_movement_speed(1);
         }
     }
     if (event.type == SDL_KEYUP) {
-
-       // reset speed 
        if (event.key.keysym.sym == SDLK_RIGHT) {
-            std::cout << "Right key pressed" << std::endl;
+            std::cout << "Right key UP" << std::endl;
             this->set_movement_speed(0);
         }
     }
@@ -84,6 +102,8 @@ void Player::setup_anim_asset(PlayerAnimationAsset* anim_asset) {
                             sprite_width, 
                             sprite_height
                         };
+
+    anim_asset->set_previous_dest_rect(dest_rect);
     anim_asset->set_dest_rect(dest_rect);
 
 

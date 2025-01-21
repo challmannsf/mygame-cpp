@@ -20,8 +20,8 @@ int main(int argc, char* argv[]) {
         world = new GameWorld();
         main_player = new Player();
         anim_asset = new PlayerAnimationAsset();
-        anim_asset->set_num_frames(6);
-        anim_asset->add_texture_path(AnimationAsset::render_states::IDLE, "asset/chars/hero/Idle.png");
+        anim_asset->add_texture_path(AnimationAsset::render_states::IDLE, "asset/chars/hero/Idle.png", 5);
+        anim_asset->add_texture_path(AnimationAsset::render_states::WALKING, "asset/chars/hero/Walk.png", 7);
         main_player->set_world(world);
         main_player->add_component<PlayerAnimationAsset>(anim_asset);
 
@@ -61,13 +61,12 @@ int main(int argc, char* argv[]) {
         }
 
         // Update the game world with all components
-        // this includes also animtions
+        // this includes also animations
         world->update();
 
         // Clear the screen
         world->render();
-    
-      
+     
     }
 
     // Cleanup

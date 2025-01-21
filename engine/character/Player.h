@@ -35,5 +35,7 @@ class Player : public Component {
         void setup_input_component(InputComponent* input_component);
 
         void handle_input(SDL_Event event);
+
+        void move();
         
 };

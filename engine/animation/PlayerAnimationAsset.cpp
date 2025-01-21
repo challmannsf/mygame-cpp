@@ -6,7 +6,7 @@ PlayerAnimationAsset::PlayerAnimationAsset() : AnimationAsset() {
 } 
 
 void PlayerAnimationAsset::play_animation_walking() {
-    // TODO
+    // the state should only be set if the source rect has actually changed
     this->set_render_state(AnimationAsset::render_states::WALKING);
 }
 

@@ -1,5 +1,5 @@
 Implement
 
-PlayerAnimationAsset
--> this is more specific and includes walk / run functionality
--> we will preload all the textures
+TODO 
+
+ANimation is corrupted as walking and idlea have different frames (6 vs 7)

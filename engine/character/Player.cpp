@@ -13,6 +13,9 @@ template<typename T> void Player::add_component(T* arg) {
     if constexpr (std::is_base_of<InputComponent, T>::value) {
         this->setup_input_component(arg);
     }
+    if constexpr (std::is_base_of<CombatSystem, T>::value) {
+        this->setup_combat_system(arg);
+    }
 }
 
 /**
@@ -59,20 +62,8 @@ void Player::handle_input(SDL_Event event) {
         throw GameException(msg, GameException::ABORT);
     }
 
-    // TODO move to input component
-    if(event.type == SDL_KEYDOWN) {
-        // Increase speed
-        if (event.key.keysym.sym == SDLK_RIGHT) {
-            std::cout << "Right key pressed" << std::endl;
-            this->set_movement_speed(1);
-        }
-    }
-    if (event.type == SDL_KEYUP) {
-       if (event.key.keysym.sym == SDLK_RIGHT) {
-            std::cout << "Right key UP" << std::endl;
-            this->set_movement_speed(0);
-        }
-    }
+    this->input_component->set_player(this);
+    this->input_component->handle_input(event);
 }
 
 void Player::setup_input_component(InputComponent* input_component) {
@@ -102,12 +93,21 @@ void Player::setup_anim_asset(PlayerAnimationAsset* anim_asset) {
                             sprite_width, 
                             sprite_height
                         };
-
-    anim_asset->set_previous_dest_rect(dest_rect);
     anim_asset->set_dest_rect(dest_rect);
 
 
     // Set the animation asset which is used for the current player
     this->set_anim_asset(anim_asset);
 }
+
+void Player::setup_combat_system(CombatSystem* combat_system) {
+    // TODO work on this
+    this->combat_system = combat_system;
+}
+
+
+void Player::attack() {
+    // TODO - implement
+}
+
 

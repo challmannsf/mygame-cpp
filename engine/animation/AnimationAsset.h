@@ -36,8 +36,6 @@ class AnimationAsset : public Component {
         // Destination rectangle (position and size on the screen)
         SDL_Rect dest_rect;
 
-        SDL_Rect previous_dest_rect;
-
         // The current state of the animation to render the texture for
         std::string current_render_state; 
 
@@ -65,8 +63,7 @@ class AnimationAsset : public Component {
         void set_dest_rect(SDL_Rect dest_rect);
         SDL_Rect get_dest_rect();
 
-        void set_previous_dest_rect(SDL_Rect dest_rect);
-        SDL_Rect get_previous_dest_rect();
+     
 
         void set_render_state(const std::string& state);
         const std::string& get_render_state();

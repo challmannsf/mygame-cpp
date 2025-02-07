@@ -59,14 +59,6 @@ SDL_Rect AnimationAsset::get_dest_rect() {
 }
 
 
-SDL_Rect AnimationAsset::get_previous_dest_rect() {
-    return this->previous_dest_rect;
-}
-
-void AnimationAsset::set_previous_dest_rect(SDL_Rect dest_rect) {
-    this->previous_dest_rect = dest_rect;
-}
-
 void AnimationAsset::set_render_state(const std::string& state) {
     this->current_render_state = state;
 }
@@ -98,9 +90,6 @@ void AnimationAsset::load_textures(SDL_Renderer* renderer) {
 }
 
 /**
- * // TODO - calll UPDATE only when the dest rect is different than before??
- * 
- * 
  * 
  * TODO understand the frame time handling. 
  * if we set the last frame time from multiple update calls, this can cause the animation to be faster than expected.
@@ -108,7 +97,6 @@ void AnimationAsset::load_textures(SDL_Renderer* renderer) {
 void AnimationAsset::update() {
     Uint32 current_time = SDL_GetTicks();
     std::map<std::string, AnimationAsset::texture_data> textures = this->get_anim_textures();
-    this->set_previous_dest_rect(this->get_dest_rect()); // Store the previous dest rect
     if (current_time - this->last_frame_time > FRAME_TIME) {
         current_frame = (current_frame + 1) %  textures[this->current_render_state].number_of_frames;             // @TODO - instead of 6 - use the number of frame from the current TEXTURE PATH
         this->src_rect.x = current_frame * (this->src_rect.w + 28);        // @TODO move to a var 28 is the offset of the sprite!
